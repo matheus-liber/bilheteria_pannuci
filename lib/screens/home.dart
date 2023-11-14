@@ -35,13 +35,16 @@ class _HomeState extends State<Home> {
                   style: Theme.of(context).textTheme.displayLarge,
                 ),
               ),
-              const GenreFilter(),
+              GenreFilter(homeCubit: homeCubit),
               BlocBuilder(
                 bloc: homeCubit,
                 builder: (context, state) {
                   if (state is HomeLoading) {
                     return SliverFillRemaining(child: Center(child: CircularProgressIndicator()));
                   } else if (state is HomeSuccess) {
+                    if (state.movies.isEmpty) {
+                      return SliverFillRemaining(child: Center(child: Text('Não há filmes desse gênero')));
+                    }
                     return SliverGrid.builder(
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
